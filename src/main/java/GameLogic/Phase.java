@@ -5,7 +5,6 @@ public class Phase {
     private static TimeOfDay[] timeOfDay = TimeOfDay.values();
     private static int maxNumberOfPhases = timeOfDay.length;
     private static TimeOfDay currentTimeOfDay = timeOfDay[currentPhase];
-    private static Phase phase = new Phase();
 
 
     private Phase() {
@@ -15,7 +14,7 @@ public class Phase {
         return currentTimeOfDay;
     }
 
-    public static void togglePhase() {
+    public static void nextPhase() {
         currentPhase++;
         if (currentPhase == maxNumberOfPhases) {
             currentPhase = 0;

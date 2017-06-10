@@ -1,18 +1,19 @@
-package Players.ConcretePlayers.ConcreteMafiaPlayers;
+package GameLogic;
 
 
 import Actions.ContextAction.Action;
-import Players.ContextPlayers.Mafia;
+import Players.ContextPlayers.Player;
 import Players.Status;
 
-public class Don<ClientAction> extends Mafia {
+public class Narrator<AdminAction> extends Player {
+    public void say() {
 
-    @Override
+    }
+
     public void setAction(Action action) {
 
     }
 
-    @Override
     public void setStatus(Status status) {
 
     }

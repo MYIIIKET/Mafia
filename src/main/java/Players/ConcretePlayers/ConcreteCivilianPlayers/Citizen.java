@@ -2,14 +2,17 @@ package Players.ConcretePlayers.ConcreteCivilianPlayers;
 
 import Actions.ContextAction.Action;
 import Players.ContextPlayers.Civilian;
+import Players.Status;
 
-public class Citizen extends Civilian {
-    public void say() {
+public class Citizen<ClientAction> extends Civilian {
+
+    @Override
+    public void setAction(Action action) {
 
     }
 
     @Override
-    public void setAction(Action action) {
+    public void setStatus(Status status) {
 
     }
 }
