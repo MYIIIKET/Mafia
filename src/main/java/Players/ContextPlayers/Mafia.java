@@ -1,5 +1,7 @@
 package Players.ContextPlayers;
 
 
-public abstract class Mafia extends Player {
+import Actions.ContextAction.ClientAction;
+
+public abstract class Mafia extends Player<ClientAction> {
 }

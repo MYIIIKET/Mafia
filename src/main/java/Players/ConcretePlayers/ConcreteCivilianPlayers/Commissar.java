@@ -2,13 +2,14 @@ package Players.ConcretePlayers.ConcreteCivilianPlayers;
 
 
 import Actions.ContextAction.Action;
+import Actions.ContextAction.ClientAction;
 import Players.ContextPlayers.Civilian;
 import Players.Status;
 
-public class Commissar<ClientAction> extends Civilian {
+public class Commissar extends Civilian {
 
-    @Override
-    public void setAction(Action action) {
+
+    public void setAction(ClientAction action) {
 
     }
 

@@ -1,5 +1,7 @@
 package Players.ContextPlayers;
 
 
-public abstract class Civilian extends Player {
+import Actions.ContextAction.ClientAction;
+
+public abstract class Civilian extends Player<ClientAction> {
 }

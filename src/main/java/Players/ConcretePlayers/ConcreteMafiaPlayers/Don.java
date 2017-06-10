@@ -2,13 +2,13 @@ package Players.ConcretePlayers.ConcreteMafiaPlayers;
 
 
 import Actions.ContextAction.Action;
+import Actions.ContextAction.ClientAction;
 import Players.ContextPlayers.Mafia;
 import Players.Status;
 
-public class Don<ClientAction> extends Mafia {
+public class Don extends Mafia {
 
-    @Override
-    public void setAction(Action action) {
+    public void setAction(ClientAction action) {
 
     }
 
