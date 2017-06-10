@@ -7,6 +7,6 @@ import Actions.ContextAction.ClientAction;
 public class VoteAction extends ClientAction {
     @Override
     public void performAction() {
-
+        System.out.println("Vote");
     }
 }

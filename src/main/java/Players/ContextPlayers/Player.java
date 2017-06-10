@@ -9,7 +9,7 @@ public abstract class Player<someAction extends Action> {
 
     }
 
-    public abstract void setAction(someAction action);
+    public abstract  void setAction(someAction action);
 
     public abstract void setStatus(Status status);
 }

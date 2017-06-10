@@ -8,11 +8,6 @@ import Players.Status;
 
 public class Commissar extends Civilian {
 
-
-    public void setAction(ClientAction action) {
-
-    }
-
     @Override
     public void setStatus(Status status) {
 

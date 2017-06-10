@@ -8,9 +8,6 @@ import Players.Status;
 public class Citizen extends Civilian {
 
 
-    public void setAction(ClientAction action) {
-
-    }
 
     @Override
     public void setStatus(Status status) {
