@@ -6,7 +6,8 @@ import Actions.ContextAction.ClientAction;
 public abstract class Civilian extends Player<ClientAction> {
 
     @Override
-    public void setAction(ClientAction action) {
+    public void doAction(ClientAction action) {
         action.performAction();
     }
+
 }

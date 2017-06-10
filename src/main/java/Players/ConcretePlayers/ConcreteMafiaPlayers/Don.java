@@ -7,9 +7,6 @@ import Players.ContextPlayers.Mafia;
 import Players.Status;
 
 public class Don extends Mafia {
-
-
-    @Override
     public void setStatus(Status status) {
 
     }

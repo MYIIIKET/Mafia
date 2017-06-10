@@ -6,11 +6,4 @@ import Players.ContextPlayers.Civilian;
 import Players.Status;
 
 public class Citizen extends Civilian {
-
-
-
-    @Override
-    public void setStatus(Status status) {
-
-    }
 }

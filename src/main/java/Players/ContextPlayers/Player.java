@@ -1,15 +1,25 @@
 package Players.ContextPlayers;
 
 import Actions.ContextAction.Action;
-import Actions.ContextAction.ClientAction;
 import Players.Status;
 
 public abstract class Player<someAction extends Action> {
-    public void say() {
 
+    public Status status = new Status();
+
+    public void say() {
+        if (!getStatus().isAlive()) {
+            return;
+        }
     }
 
-    public abstract  void setAction(someAction action);
+    public void toggleStatus() {
+        getStatus().toggleAlive();
+    }
 
-    public abstract void setStatus(Status status);
+    public Status getStatus() {
+        return status;
+    }
+
+    public abstract void doAction(someAction action);
 }

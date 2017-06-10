@@ -6,17 +6,9 @@ import Actions.ContextAction.AdminAction;
 import Players.ContextPlayers.Player;
 import Players.Status;
 
-public class Narrator extends Player<AdminAction> {
-    public void say() {
-
-    }
-
-    public void setAction(AdminAction action) {
-        action.performAction();
-    }
+public class Narrator {
 
 
-    public void setStatus(Status status) {
-
+    private Narrator() {
     }
 }
