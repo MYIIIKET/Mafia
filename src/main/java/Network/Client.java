@@ -2,42 +2,72 @@ package Network;
 
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.Socket;
+import java.net.*;
 
 
-public class Client extends Network {
+public class Client extends Thread {
+    private final String name;
     private int serverPort;
     private InetAddress ipAddress;
+    private Socket socket;
+    private boolean isServerOn = false;
 
+    private Client client = this;
 
-    public Client() {
+    private BufferedReader in;
+    private PrintWriter out;
+
+    public Client(String name) {
+        this.name = name;
     }
 
-    public void connectToServer(String address, int serverPort) throws IOException {
-        this.ipAddress = InetAddress.getByName(address);
-        this.serverPort = serverPort;
+
+    public void connectToServer(String address, int serverPort) {
         System.out.println("Connecting to server...");
-        createSocket();
-        System.out.println("Connected");
+        createSocket(address, serverPort);
         createStream();
+        sendInfo();
+        System.out.println("Connected");
+        startClient();
     }
 
-    protected void createSocket() throws IOException {
-        socket = new Socket(ipAddress, serverPort);
-        thread = new Thread(this);
-        thread.start();
+    private void sendInfo() {
+        write(name);
+    }
+
+    private void write(String text) {
+        out.println(name);
+        out.flush();
+    }
+
+    private void startClient() {
+        client.start();
+    }
+
+    private void createSocket(String address, int port) {
+        try {
+            ipAddress = InetAddress.getByName(address);
+            serverPort = port;
+            socket = new Socket(ipAddress, serverPort);
+        } catch (IOException e) {
+            System.out.println("Server not responding");
+            System.exit(1);
+        }
+    }
+
+    private void createStream() {
+        try {
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void run() {
-        while (socket.isConnected()) {
-            try {
-                dataInputStream.readUTF();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                disconnect();
-            }
+        while (isServerOn) {
+
         }
     }
+
 }

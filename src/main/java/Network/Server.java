@@ -3,88 +3,76 @@ package Network;
 
 import java.io.*;
 import java.net.ServerSocket;
-import java.net.SocketAddress;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.Socket;
+import java.util.Map;
+import java.util.TreeMap;
 
-public class Server extends Network {
-    private static final int port = 8082;
-    private ServerSocket serverSocket;
-    private boolean isServerOn = false;
+public class Server extends Thread {
+    private static final int port = 8080;
+    private static ServerSocket serverSocket;
+    private static boolean isServerOn = false;
 
-    Messenger messenger;
+    private static Map<Integer, Socket> sockets = new TreeMap<Integer, Socket>();
+    private static Map<Integer, BufferedReader> bufferedReaderMap = new TreeMap<Integer, BufferedReader>();
+    private static Map<Integer, PrintWriter> printWriterMap = new TreeMap<Integer, PrintWriter>();
 
-    List<SocketAddress> clientList = new ArrayList<SocketAddress>();
+    private static int totalConnections = sockets.size();
 
-    public Server() throws IOException {
-        createSocket();
-        createMessenger();
-        toggleServer();
+
+    private static Server server = new Server();
+
+    private Server() {
     }
 
-    private void toggleServer() {
-        isServerOn = !isServerOn;
+    public static int getTotalConnections() {
+        return totalConnections;
+
     }
 
-    public void startServer() {
-        thread = new Thread(this);
-        thread.start();
-    }
-
-    public void stopServer() {
-        toggleServer();
-    }
-
-    protected void createSocket() throws IOException {
+    public static void startServer() throws IOException {
         serverSocket = new ServerSocket(port);
+        isServerOn = true;
+        server.start();
     }
 
-    private void createMessenger() {
-        messenger = new Messenger();
-        Thread thread = new Thread(messenger);
-        thread.setDaemon(true);
-        thread.start();
-    }
-
-    private void waitForClient() throws IOException {
-        socket = serverSocket.accept();
-    }
-
-    private void addClientToList() {
-        clientList.add(socket.getRemoteSocketAddress());
+    public static void stopServer() {
+        isServerOn = false;
     }
 
     public void run() {
         while (isServerOn) {
-            try {
-                System.out.println("Wait for client...");
-                waitForClient();
-                System.out.println("Client connected");
-                createStream();
-                addClientToList();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            System.out.println("Waiting for next client...");
+            addSocketToList(getClientSocket());
         }
     }
 
-    private class Messenger implements Runnable {
-
-        private void sendMessageToClients() throws IOException {
-            for (int i = 0; i < clientList.size(); i++) {
-                dataOutputStream.writeUTF("Hello " + clientList.get(i));
-            }
+    private static Socket getClientSocket() {
+        Socket socket = null;
+        try {
+            socket = serverSocket.accept();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        public void run() {
-            while (true) {
-                try {
-                    sendMessageToClients();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        return socket;
     }
+
+    private static void addSocketToList(Socket socket) {
+        String name;
+        int hash;
+
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            name = in.readLine();
+            hash = name.hashCode();
+            sockets.put(hash, socket);
+            bufferedReaderMap.put(hash, new BufferedReader(new InputStreamReader(socket.getInputStream())));
+            printWriterMap.put(hash, new PrintWriter(new OutputStreamWriter(socket.getOutputStream())));
+            System.out.println("Client: " + name + " " + sockets.get(hash) + " connected");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        totalConnections = sockets.size();
+    }
+
+
 }
