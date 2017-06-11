@@ -36,7 +36,7 @@ public class Client extends Thread {
     }
 
     private void write(String text) {
-        out.println(name);
+        out.println(text);
         out.flush();
     }
 
@@ -49,6 +49,7 @@ public class Client extends Thread {
             ipAddress = InetAddress.getByName(address);
             serverPort = port;
             socket = new Socket(ipAddress, serverPort);
+            isServerOn = true;
         } catch (IOException e) {
             System.out.println("Server not responding");
             System.exit(1);
@@ -66,8 +67,9 @@ public class Client extends Thread {
 
     public void run() {
         while (isServerOn) {
-
+            write("Hello");
+//            System.out.println("Server disconnected");
+//            System.exit(1);
         }
     }
-
 }
