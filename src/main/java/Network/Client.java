@@ -1,6 +1,8 @@
 package Network;
 
 
+import Players.ContextPlayers.Player;
+
 import java.io.*;
 import java.net.*;
 
@@ -13,6 +15,7 @@ public class Client extends Thread {
     private boolean isServerOn = false;
 
     private Client client = this;
+    private Player role;
 
     private BufferedReader in;
     private PrintWriter out;
@@ -29,6 +32,16 @@ public class Client extends Thread {
         sendInfo();
         System.out.println("Connected");
         startClient();
+    }
+
+    private void getInfo() {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            role = (Player) ois.readObject();
+            System.out.println(role.getClass().getCanonicalName());
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void sendInfo() {
@@ -69,7 +82,6 @@ public class Client extends Thread {
         while (isServerOn) {
             try {
                 Thread.sleep(1000);
-                write("Hello from " + name);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

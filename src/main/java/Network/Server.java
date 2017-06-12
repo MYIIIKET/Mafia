@@ -1,6 +1,10 @@
 package Network;
 
 
+import GameLogic.GameLogic;
+import Players.ConcretePlayers.ConcreteCivilianPlayers.Citizen;
+import com.sun.xml.internal.txw2.output.DataWriter;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,10 +16,10 @@ public class Server extends Thread {
     private static ServerSocket serverSocket;
     private static boolean isServerOn = false;
 
-    private static Map<Integer, Socket> sockets = new TreeMap<Integer, Socket>();
-    private static Map<Integer, BufferedReader> bufferedReaderMap = new TreeMap<Integer, BufferedReader>();
-    private static Map<Integer, PrintWriter> printWriterMap = new TreeMap<Integer, PrintWriter>();
-    private static Map<Integer, Thread> clientThreadsMap = new TreeMap<Integer, Thread>();
+    private static Map<Integer, Socket> sockets = new TreeMap<>();
+    private static Map<Integer, BufferedReader> bufferedReaderMap = new TreeMap<>();
+    private static Map<Integer, PrintWriter> printWriterMap = new TreeMap<>();
+    private static Map<Integer, Thread> clientThreadsMap = new TreeMap<>();
 
     private static int totalConnections = sockets.size();
 
@@ -27,7 +31,6 @@ public class Server extends Thread {
 
     public static int getTotalConnections() {
         return totalConnections;
-
     }
 
     public static void startServer() throws IOException {
@@ -74,6 +77,7 @@ public class Server extends Thread {
             clientThreadsMap.put(hash, clientProcessing);
             clientProcessing.start();
             System.out.println("Client: " + name + " " + sockets.get(hash) + " connected");
+            GameLogic.generatePlayerRoles(10);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,7 +90,6 @@ public class Server extends Thread {
         private BufferedReader reader;
         private PrintWriter writer;
 
-        private String message = null;
         ReaderThread readerThread = new ReaderThread();
 
         public ClientProcessing(String name, BufferedReader reader, PrintWriter writer) {
@@ -100,30 +103,15 @@ public class Server extends Thread {
         public void run() {
             while (true) {
                 synchronized (this) {
-                    if (message != null) {
-                        System.out.println(message);
-                        message = null;
-                    }
                 }
             }
         }
 
         private class ReaderThread extends Thread {
-
             public void run() {
                 while (true) {
-                    try {
-                        message = reader.readLine();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }
             }
-        }
-
-        private void write(String text) {
-            writer.println(text);
-            writer.flush();
         }
     }
 }

@@ -1,7 +1,9 @@
 package Players;
 
 
-public class Status {
+import java.io.Serializable;
+
+public class Status implements Serializable {
     private boolean isAlive = true;
 
     public boolean isAlive() {
