@@ -67,9 +67,12 @@ public class Client extends Thread {
 
     public void run() {
         while (isServerOn) {
-            write("Hello");
-//            System.out.println("Server disconnected");
-//            System.exit(1);
+            try {
+                Thread.sleep(1000);
+                write("Hello from " + name);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

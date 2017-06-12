@@ -86,31 +86,37 @@ public class Server extends Thread {
         private BufferedReader reader;
         private PrintWriter writer;
 
-        private String receivedMessage = null;
-        private String sendMessage = "Received";
+        private String message = null;
+        ReaderThread readerThread = new ReaderThread();
 
         public ClientProcessing(String name, BufferedReader reader, PrintWriter writer) {
             this.name = name;
             this.reader = reader;
             this.writer = writer;
+            readerThread.setDaemon(true);
+            readerThread.start();
         }
 
         public void run() {
             while (true) {
-                try {
-                    System.out.println(reader.readLine());
-                } catch (IOException e) {
-                    System.exit(1);
+                synchronized (this) {
+                    if (message != null) {
+                        System.out.println(message);
+                        message = null;
+                    }
                 }
             }
         }
 
-        private class Reader extends Thread {
+        private class ReaderThread extends Thread {
+
             public void run() {
-                try {
-                    receivedMessage = reader.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                while (true) {
+                    try {
+                        message = reader.readLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
