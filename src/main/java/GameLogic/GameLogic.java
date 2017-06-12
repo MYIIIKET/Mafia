@@ -9,7 +9,7 @@ import Players.ContextPlayers.Player;
 import java.util.*;
 
 public class GameLogic {
-    private static final int minPlayerNumber = 3;
+    public static final int minPlayerNumber = 3;
     private static final int maxPlayerNumber = 10;
     private static final int calcFactor = 4;
     private static final int CivilianRolesNumber = 2;

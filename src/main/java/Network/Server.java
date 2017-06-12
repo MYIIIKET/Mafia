@@ -44,9 +44,18 @@ public class Server extends Thread {
     }
 
     public void run() {
+        ClientWaiter clientWaiter = new ClientWaiter();
+        clientWaiter.setDaemon(true);
+        addSocketToList(getClientSocket());
+        clientWaiter.start();
         while (isServerOn) {
             System.out.println("Waiting for next client...");
-            addSocketToList(getClientSocket());
+            if (clientWaiter.isAlive()) {
+                addSocketToList(getClientSocket());
+            } else {
+                System.out.println("Time is out");
+                break;
+            }
         }
     }
 
@@ -65,6 +74,7 @@ public class Server extends Thread {
         int hash;
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
             name = in.readLine();
             hash = name.hashCode();
             sockets.put(hash, socket);
@@ -77,41 +87,18 @@ public class Server extends Thread {
             clientThreadsMap.put(hash, clientProcessing);
             clientProcessing.start();
             System.out.println("Client: " + name + " " + sockets.get(hash) + " connected");
-            GameLogic.generatePlayerRoles(10);
+            sendInfo(name + " connected");
         } catch (IOException e) {
             e.printStackTrace();
         }
         totalConnections = sockets.size();
     }
 
-    private class ClientProcessing extends Thread {
-
-        private String name;
-        private BufferedReader reader;
-        private PrintWriter writer;
-
-        ReaderThread readerThread = new ReaderThread();
-
-        public ClientProcessing(String name, BufferedReader reader, PrintWriter writer) {
-            this.name = name;
-            this.reader = reader;
-            this.writer = writer;
-            readerThread.setDaemon(true);
-            readerThread.start();
-        }
-
-        public void run() {
-            while (true) {
-                synchronized (this) {
-                }
-            }
-        }
-
-        private class ReaderThread extends Thread {
-            public void run() {
-                while (true) {
-                }
-            }
+    private void sendInfo(String text) {
+        for (Map.Entry<Integer, PrintWriter> entry : printWriterMap.entrySet()) {
+            entry.getValue().println(text);
         }
     }
+
+
 }

@@ -34,18 +34,16 @@ public class Client extends Thread {
         startClient();
     }
 
-    private void getInfo() {
-        try {
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-            role = (Player) ois.readObject();
-            System.out.println(role.getClass().getCanonicalName());
-        } catch (ClassNotFoundException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void sendInfo() {
         write(name);
+    }
+
+    private void getInfo() {
+        try {
+            System.out.println(in.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void write(String text) {
@@ -80,11 +78,7 @@ public class Client extends Thread {
 
     public void run() {
         while (isServerOn) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            getInfo();
         }
     }
 }
